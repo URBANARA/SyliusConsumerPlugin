@@ -20,7 +20,6 @@ class AppKernel extends Kernel
 
             new \SimpleBus\SymfonyBridge\SimpleBusCommandBusBundle(),
             new \SimpleBus\SymfonyBridge\SimpleBusEventBusBundle(),
-            new \OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new \SyliusLabs\RabbitMqSimpleBusBundle\RabbitMqSimpleBusBundle(),
             new \Sylake\SyliusConsumerPlugin\SylakeSyliusConsumerPlugin(),
         ]);

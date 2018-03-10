@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Sylake\SyliusConsumerPlugin\Denormalizer;
 
-use PhpAmqpLib\Message\AMQPMessage;
+use Interop\Amqp\Impl\AmqpMessage;
 use PhpSpec\ObjectBehavior;
 use Sylake\SyliusConsumerPlugin\Event\ProductUpdated;
 use SyliusLabs\RabbitMqSimpleBusBundle\Denormalizer\DenormalizationFailedException;
@@ -19,7 +19,7 @@ final class ProductUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_does_not_support_messages_with_invalid_body()
     {
-        $invalidMessage = new AMQPMessage('invalid JSON');
+        $invalidMessage = new AmqpMessage('invalid JSON');
 
         $this->supports($invalidMessage)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$invalidMessage]);
@@ -27,12 +27,12 @@ final class ProductUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_does_not_support_messages_without_payload_or_type()
     {
-        $messageWithPayloadOnly = new AMQPMessage(json_encode(['payload' => []]));
+        $messageWithPayloadOnly = new AmqpMessage(json_encode(['payload' => []]));
 
         $this->supports($messageWithPayloadOnly)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$messageWithPayloadOnly]);
 
-        $messageWithTypeOnly = new AMQPMessage(json_encode(['type' => 'akeneo_product_updated']));
+        $messageWithTypeOnly = new AmqpMessage(json_encode(['type' => 'akeneo_product_updated']));
 
         $this->supports($messageWithTypeOnly)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$messageWithTypeOnly]);
@@ -40,7 +40,7 @@ final class ProductUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_supports_product_updated_messages()
     {
-        $message = new AMQPMessage('{
+        $message = new AmqpMessage('{
             "type": "akeneo_product_updated",
             "payload": {
                 "identifier": "AKNTS_BPXS",
@@ -69,7 +69,7 @@ final class ProductUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_does_not_support_messages_without_identifier()
     {
-        $messageWithoutIdentifier = new AMQPMessage('{
+        $messageWithoutIdentifier = new AmqpMessage('{
             "type": "akeneo_product_updated",
             "payload": {
                 "identifier": null,
@@ -86,7 +86,7 @@ final class ProductUpdatedDenormalizerSpec extends ObjectBehavior
         $this->supports($messageWithoutIdentifier)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$messageWithoutIdentifier]);
 
-        $messageWithoutIdentifier = new AMQPMessage('{
+        $messageWithoutIdentifier = new AmqpMessage('{
             "type": "akeneo_product_updated",
             "payload": {
                 "categories": [],
@@ -105,7 +105,7 @@ final class ProductUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_ignores_extra_fields_passed_with_payload()
     {
-        $messageWithExtraFields = new AMQPMessage('{
+        $messageWithExtraFields = new AmqpMessage('{
             "type": "akeneo_product_updated",
             "payload": {
                 "identifier": "AKNTS_BPXS",

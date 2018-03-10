@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-final class SylakeSyliusConsumerExtension extends Extension implements PrependExtensionInterface
+final class SylakeSyliusConsumerExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -38,30 +38,5 @@ final class SylakeSyliusConsumerExtension extends Extension implements PrependEx
             'sylake_sylius_consumer.denormalizer.product.image_attribute',
             $config['denormalizer']['product']['image_attribute']
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function prepend(ContainerBuilder $container)
-    {
-        if (!$container->hasExtension('old_sound_rabbit_mq')) {
-            throw new \RuntimeException('Make sure OldSoundRabbitMqBundle is enabled.');
-        }
-
-        $container->prependExtensionConfig('old_sound_rabbit_mq', [
-            'consumers' => [
-                'sylake' => [
-                    'exchange_options' => [
-                        'name' => 'sylake',
-                        'type' => 'fanout',
-                    ],
-                    'queue_options' => [
-                        'name' => 'sylake',
-                    ],
-                    'callback' => 'rabbitmq_simplebus.consumer',
-                ],
-            ],
-        ]);
     }
 }

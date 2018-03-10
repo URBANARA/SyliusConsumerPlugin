@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sylake\SyliusConsumerPlugin\Denormalizer;
 
-use PhpAmqpLib\Message\AMQPMessage;
+use Interop\Amqp\AmqpMessage;
 use SyliusLabs\RabbitMqSimpleBusBundle\Denormalizer\DenormalizationFailedException;
 use SyliusLabs\RabbitMqSimpleBusBundle\Denormalizer\DenormalizerInterface;
 
@@ -13,7 +13,7 @@ abstract class AkeneoDenormalizer implements DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    final public function supports(AMQPMessage $message): bool
+    final public function supports(AmqpMessage $message): bool
     {
         try {
             $this->denormalize($message);
@@ -27,7 +27,7 @@ abstract class AkeneoDenormalizer implements DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    final public function denormalize(AMQPMessage $message)
+    final public function denormalize(AmqpMessage $message)
     {
         $body = json_decode($message->getBody(), true);
 

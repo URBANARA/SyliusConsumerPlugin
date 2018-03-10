@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\Sylake\SyliusConsumerPlugin\Denormalizer;
 
-use PhpAmqpLib\Message\AMQPMessage;
+use Interop\Amqp\Impl\AmqpMessage;
 use PhpSpec\ObjectBehavior;
 use Sylake\SyliusConsumerPlugin\Event\TaxonUpdated;
 use Sylake\SyliusConsumerPlugin\Model\Translations;
@@ -20,7 +20,7 @@ final class TaxonUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_does_not_support_messages_with_invalid_body()
     {
-        $invalidMessage = new AMQPMessage('invalid JSON');
+        $invalidMessage = new AmqpMessage('invalid JSON');
 
         $this->supports($invalidMessage)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$invalidMessage]);
@@ -28,12 +28,12 @@ final class TaxonUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_does_not_support_messages_without_payload_or_type()
     {
-        $messageWithPayloadOnly = new AMQPMessage(json_encode(['payload' => []]));
+        $messageWithPayloadOnly = new AmqpMessage(json_encode(['payload' => []]));
 
         $this->supports($messageWithPayloadOnly)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$messageWithPayloadOnly]);
 
-        $messageWithTypeOnly = new AMQPMessage(json_encode(['type' => 'akeneo_category_updated']));
+        $messageWithTypeOnly = new AmqpMessage(json_encode(['type' => 'akeneo_category_updated']));
 
         $this->supports($messageWithTypeOnly)->shouldReturn(false);
         $this->shouldThrow(DenormalizationFailedException::class)->during('denormalize', [$messageWithTypeOnly]);
@@ -41,7 +41,7 @@ final class TaxonUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_supports_messages_with_payload_and_specific_type_with_parent()
     {
-        $supportedMessage = new AMQPMessage(json_encode([
+        $supportedMessage = new AmqpMessage(json_encode([
             'type' => 'akeneo_category_updated',
             'payload' => [
                 'code' => 'SUBCATEGORY',
@@ -63,7 +63,7 @@ final class TaxonUpdatedDenormalizerSpec extends ObjectBehavior
 
     function it_supports_messages_with_payload_and_specific_type_without_parent()
     {
-        $supportedMessage = new AMQPMessage(json_encode([
+        $supportedMessage = new AmqpMessage(json_encode([
             'type' => 'akeneo_category_updated',
             'payload' => [
                 'code' => 'SUBCATEGORY',

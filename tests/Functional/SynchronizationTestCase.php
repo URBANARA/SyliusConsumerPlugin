@@ -6,9 +6,9 @@ namespace Tests\Sylake\SyliusConsumerPlugin\Functional;
 
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
-use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
-use PhpAmqpLib\Message\AMQPMessage;
+use Interop\Amqp\Impl\AmqpMessage;
 use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
+use SyliusLabs\RabbitMqSimpleBusBundle\Consumer\RabbitMqConsumer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class SynchronizationTestCase extends KernelTestCase
@@ -19,7 +19,7 @@ abstract class SynchronizationTestCase extends KernelTestCase
     protected $entityManager;
 
     /**
-     * @var ConsumerInterface
+     * @var RabbitMqConsumer
      */
     private $consumer;
 
@@ -64,7 +64,7 @@ abstract class SynchronizationTestCase extends KernelTestCase
 
     protected function consume(string $message): void
     {
-        $this->consumer->execute(new AMQPMessage($message));
+        $this->consumer->execute(new AmqpMessage($message));
 
         $this->entityManager->clear();
     }
