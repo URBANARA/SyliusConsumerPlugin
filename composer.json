@@ -1,5 +1,5 @@
 {
-    "name": "marcelsud/sylius-consumer-plugin",
+    "name": "URBANARA/sylius-consumer-plugin",
     "type": "sylius-plugin",
     "description": "Integrates Sylius with message processing for sylake/akeneo-producer-bundle.",
     "license": "MIT",
