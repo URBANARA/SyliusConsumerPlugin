@@ -16,7 +16,7 @@
     "require": {
         "php": "^7.1",
 
-        "marcelsud/rabbitmq-simplebus-bundle": "^1.1",
+        "urbanaralabs/rabbitmq-simplebus-bundle": "^1.1",
         "sylius/sylius": "^1.0"
     },
     "require-dev": {
